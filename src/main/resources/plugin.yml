@@ -1,0 +1,14 @@
+name: ${project.name}
+version: ${project.version}
+description: Want some good quality crates without paying money for them? Then check this crate plugin out.
+author: BadBones69
+api-version: 1.13
+main: me.badbones69.crazycrates.Main
+softdepend: [MVdWPlaceholderAPI, PlaceholderAPI]
+commands:
+  crazycrates:
+    description: Opens the GUI.
+    aliases: [cc, ccrate, crazycrate, crate, crates]
+  key:
+    description: Views the amount of keys you/others have.
+    aliases: [keys]
