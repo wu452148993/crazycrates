@@ -11,6 +11,7 @@ import com.github.wulf.xmaterial.IMaterial;
 import com.github.wulf.xmaterial.XMaterial;
 
 import cc.bukkitPlugin.commons.nmsutil.nbt.NBTUtil;
+import me.badbones69.crazycrates.multisupport.BossShopSupport;
 import me.badbones69.crazycrates.multisupport.reflectionapi.ReflectionUtil;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class ItemBuilder {
 	private EntityType entityType;
 	private HashMap<String, String> namePlaceholders;
 	private HashMap<String, String> lorePlaceholders;
+	private String NBT;
 	
 	/**
 	 * The inishal starting point for making an item.
@@ -58,6 +60,7 @@ public class ItemBuilder {
 		this.glowing = false;
 		this.namePlaceholders = new HashMap<>();
 		this.lorePlaceholders = new HashMap<>();
+		this.NBT = "";
 	}
 	
 	/**
@@ -456,15 +459,46 @@ public class ItemBuilder {
 		return this;
 	}
 	
+	public ItemBuilder setNBT(String NBT) {
+		this.NBT = NBT;
+		return this;
+	}
+	
 	/**
 	 * Builder the item from all the information that was given to the builder.
 	 * @return The result of all the info that was given to the builder as an ItemStack.
 	 */
 	public ItemStack build() {
 		ItemStack item = referenceItem != null ? referenceItem : new ItemStack(material, amount, metaData);
+		
+		if(this.NBT!=null && this.NBT!="")
+		{
+			Object item_NBT=BossShopSupport.nbtToNBT(NBT);
+			item = BossShopSupport.setItemNBT(item_NBT,item);
+		}
+		
 		ItemMeta itemMeta = item.getItemMeta();
 		itemMeta.setDisplayName(getUpdatedName());
-		itemMeta.setLore(getUpdatedLore());
+		
+		List <String> newLore = getUpdatedLore();
+		//String addLore = "";
+        if(item.getItemMeta().hasLore() && !item.getItemMeta().getLore().get(0).equals(""))
+        {
+        	//addLore += "&2描述：";
+        	if(!newLore.isEmpty())
+        	{
+        		newLore.add("");
+        	}
+        	newLore.add("§e描述：");
+        	for(String sStr : item.getItemMeta().getLore())
+        	{
+        		//addLore += "&e" + sStr + "#";
+        		newLore.add(sStr);
+        	}     
+        	 //newLore.add(addLore);
+        }
+        
+		itemMeta.setLore(newLore);
 		item.setItemMeta(itemMeta);
 		item.addUnsafeEnchantments(enchantments);
 		addGlow(item, glowing);

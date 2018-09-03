@@ -4,6 +4,7 @@ import me.badbones69.crazycrates.api.CrazyCrates;
 import me.badbones69.crazycrates.api.enums.Messages;
 import me.badbones69.crazycrates.controllers.FileManager.Files;
 import me.badbones69.crazycrates.controllers.FireworkDamageAPI;
+import me.badbones69.crazycrates.multisupport.BossShopSupport;
 import me.badbones69.crazycrates.multisupport.nms.*;
 import me.badbones69.crazycrates.multisupport.reflectionapi.ReflectionUtil;
 
@@ -26,6 +27,8 @@ import org.bukkit.potion.PotionType;
 
 import com.github.wulf.xmaterial.IMaterial;
 import com.github.wulf.xmaterial.XMaterial;
+
+import cc.bukkitPlugin.commons.nmsutil.nbt.NBTUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -243,7 +246,7 @@ public class Methods {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static ItemStack makeItem(String id, int amount, String name, List<String> lore, Map<Enchantment, Integer> enchants) {
+	public static ItemStack makeItem(String id, int amount, String name, List<String> lore, Map<Enchantment, Integer> enchants, Object NBT) {
 		ArrayList<String> l = new ArrayList<>();
 		String type = id;
 		int ty = 0;
@@ -280,6 +283,18 @@ public class Methods {
 			PotionMeta pm = (PotionMeta) item.getItemMeta();
 			pm.setBasePotionData(new PotionData(potionType));
 			item.setItemMeta(pm);
+		}
+		if(NBT!=null)
+		{/*
+            Object tNBTExist=NBTUtil.getItemNBT(item);
+            if(tNBTExist!=null){
+                tNBTExist=NBTUtil.mixNBT(tNBTExist,NBT,false);
+            }else{
+                tNBTExist=NBT;
+            }
+            ItemStack tResult=NBTUtil.setItemNBT(item,tNBTExist);
+            if(tResult!=null) item=tResult;*/
+			item = BossShopSupport.setItemNBT(NBT, item);
 		}
 		return item;
 	}
@@ -351,7 +366,7 @@ public class Methods {
 		return item;
 	}
 	
-	public static ItemStack makePlayerHead(String player, int amount, String name, ArrayList<String> lore, Map<Enchantment, Integer> enchants, boolean glowing) {
+	public static ItemStack makePlayerHead(String player, int amount, String name, ArrayList<String> lore, Map<Enchantment, Integer> enchants, boolean glowing, Object NBT) {
 		//ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
 		ItemStack head = XMaterial.PLAYER_HEAD.parseItem();
 		head.setAmount(amount);
@@ -376,6 +391,10 @@ public class Methods {
 		//NBTItem nbtItem = new NBTItem(head);
 		if(!player.equals("")) {
 			ReflectionUtil.setString(head, "SkullOwner", player);
+		}
+		if(NBT!=null)
+		{
+			head = BossShopSupport.setItemNBT(NBT, head);
 		}
 		return head;
 	}

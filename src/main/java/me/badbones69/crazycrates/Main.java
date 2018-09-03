@@ -12,6 +12,7 @@ import me.badbones69.crazycrates.api.objects.Prize;
 import me.badbones69.crazycrates.controllers.*;
 import me.badbones69.crazycrates.controllers.FileManager.Files;
 import me.badbones69.crazycrates.cratetypes.*;
+import me.badbones69.crazycrates.multisupport.BossShopSupport;
 import me.badbones69.crazycrates.multisupport.MVdWPlaceholderAPISupport;
 import me.badbones69.crazycrates.multisupport.PlaceholderAPISupport;
 import me.badbones69.crazycrates.multisupport.Support;
@@ -73,6 +74,10 @@ public class Main extends JavaPlugin implements Listener {
 		}
 		updateChecker = !Files.CONFIG.getFile().contains("Settings.Update-Checker") || Files.CONFIG.getFile().getBoolean("Settings.Update-Checker");
 		//Messages.addMissingMessages(); #Does work but is disabled for now.
+		if(Support.hasBossShop())
+		{
+			BossShopSupport.loaded();
+		}
 		cc.loadCrates();
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(this, this);

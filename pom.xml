@@ -130,5 +130,10 @@
    			<artifactId>particleapi</artifactId>
     		<version>2.1.1</version>
       	</dependency>
+      	 <dependency> 
+      	  	<groupId>org.black_ixx</groupId>
+    	    <artifactId>bossshop</artifactId>
+    		<version>2.5.33-beta</version>
+    	</dependency>
     </dependencies>
 </project>

@@ -14,7 +14,9 @@ import me.badbones69.crazycrates.controllers.FileManager;
 import me.badbones69.crazycrates.controllers.FileManager.Files;
 import me.badbones69.crazycrates.controllers.GUIMenu;
 import me.badbones69.crazycrates.cratetypes.*;
+import me.badbones69.crazycrates.multisupport.BossShopSupport;
 
+import org.black_ixx.bossshop.BossShop;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,6 +30,15 @@ import org.bukkit.scheduler.BukkitTask;
 
 import com.github.wulf.xmaterial.IMaterial;
 import com.github.wulf.xmaterial.XMaterial;
+
+import cc.bukkitPlugin.bossshop.commons.Log;
+import cc.bukkitPlugin.bossshop.commons.plugin.ABukkitPlugin;
+import cc.bukkitPlugin.bossshop.nbt.NBT;
+import cc.bukkitPlugin.bossshop.nbt.NBTEditManager;
+import cc.bukkitPlugin.commons.nmsutil.nbt.NBTSerializer;
+import cc.bukkitPlugin.commons.nmsutil.nbt.NBTUtil;
+import cc.bukkitPlugin.commons.nmsutil.nbt.exception.NBTDeserializeException;
+import cc.commons.util.ByteUtil;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -858,7 +869,8 @@ public class CrazyCrates {
 			.setLore(file.getStringList(path + "Lore"))
 			.setGlowing(file.getBoolean(path + "Glowing"))
 			.setUnbreakable(file.getBoolean(path + "Unbreakable"))
-			.setPlayer(file.getString(path + "Player"));
+			.setPlayer(file.getString(path + "Player"))
+			.setNBT(file.getString(path + "Nbt"));
 			HashMap<Enchantment, Integer> enchants = new HashMap<>();
 			if(file.contains(path + "DisplayEnchantments")) {
 				for(String enchant : file.getStringList(path + "DisplayEnchantments")) {
@@ -888,6 +900,7 @@ public class CrazyCrates {
 			String id = "Stone";
 			String player = "";
 			Boolean unbreaking = false;
+			Object tApplyNBT=null;
 			for(String i : l.split(", ")) {
 				if(i.startsWith("Item:")) {
 					id = i.replaceAll("Item:", "");
@@ -906,6 +919,9 @@ public class CrazyCrates {
 					if(i.replaceAll("Unbreakable-Item:", "").equalsIgnoreCase("true")) {
 						unbreaking = true;
 					}
+				}else if(i.startsWith("Nbt:")||i.startsWith("Rawnbt:")){
+					//BossShopSupport.setNBT(tApplyNBT,i);
+					tApplyNBT = BossShopSupport.ConfigtoNBT(i);
 				}else {
 					for(Enchantment enc : Enchantment.values()) {
 						if(enc.getName() != null) {
@@ -922,15 +938,15 @@ public class CrazyCrates {
 				//if(Methods.makeItem(id, amount, "").getType() == Material.SKULL_ITEM && Methods.makeItem(id, amount, "").getDurability() == 3) {
 				if(XMaterial.XfromString(id).parseIMaterial() == IMaterial.SKULL_ITEM) {
 					if(unbreaking) {
-						items.add(Methods.addUnbreaking(Methods.makePlayerHead(player, amount, name, lore, enchants, false)));
+						items.add(Methods.addUnbreaking(Methods.makePlayerHead(player, amount, name, lore, enchants, false, tApplyNBT)));
 					}else {
-						items.add(Methods.makePlayerHead(player, amount, name, lore, enchants, false));
+						items.add(Methods.makePlayerHead(player, amount, name, lore, enchants, false, tApplyNBT));
 					}
 				}else {
 					if(unbreaking) {
-						items.add(Methods.addUnbreaking(Methods.makeItem(id, amount, name, lore, enchants)));
+						items.add(Methods.addUnbreaking(Methods.makeItem(id, amount, name, lore, enchants, tApplyNBT)));
 					}else {
-						items.add(Methods.makeItem(id, amount, name, lore, enchants));
+						items.add(Methods.makeItem(id, amount, name, lore, enchants, tApplyNBT));
 					}
 				}
 			}catch(Exception e) {
@@ -945,5 +961,5 @@ public class CrazyCrates {
 		max++;
 		return min + new Random().nextInt(max - min);
 	}
-	
+
 }

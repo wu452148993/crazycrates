@@ -11,7 +11,6 @@ import me.badbones69.crazycrates.api.objects.Prize;
 import me.badbones69.crazycrates.controllers.CrateControl;
 import me.badbones69.crazycrates.controllers.FileManager.Files;
 import me.badbones69.crazycrates.multisupport.reflectionapi.ReflectionUtil;
-import net.minecraft.server.v1_13_R2.Blocks;
 
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
@@ -32,8 +31,6 @@ import org.bukkit.util.Vector;
 import org.inventivetalent.particle.ParticleEffect;
 
 import com.github.wulf.xmaterial.XMaterial;
-
-import cc.commons.util.reflect.MethodUtil;
 
 import java.util.*;
 

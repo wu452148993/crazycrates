@@ -12,4 +12,8 @@ public class Support {
 		return Bukkit.getServer().getPluginManager().getPlugin("MVdWPlaceholderAPI") != null;
 	}
 	
+	public static boolean hasBossShop() {
+		return Bukkit.getServer().getPluginManager().getPlugin("BossShop") != null;
+	}
+	
 }
