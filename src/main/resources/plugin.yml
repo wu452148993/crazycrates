@@ -4,7 +4,7 @@ description: Want some good quality crates without paying money for them? Then c
 author: BadBones69
 api-version: 1.13
 main: me.badbones69.crazycrates.Main
-softdepend: [MVdWPlaceholderAPI, PlaceholderAPI,BossShop]
+softdepend: [MVdWPlaceholderAPI, PlaceholderAPI, BossShop]
 commands:
   crazycrates:
     description: Opens the GUI.
